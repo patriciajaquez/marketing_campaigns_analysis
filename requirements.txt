@@ -3,6 +3,6 @@ matplotlib
 seaborn
 numpy
 datetime
-os
-csv
 scipy
+fuzzywuzzy
+python-Levenshtein
