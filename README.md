@@ -81,6 +81,7 @@ The dataset contains customer information such as demographics, purchasing behav
    ├── images/                # Plots and visualizations
    ├── README.md              # Project documentation
    └── marketing_analysis.ipynb  # Main analysis notebook
+   ```
 
 ---
 
