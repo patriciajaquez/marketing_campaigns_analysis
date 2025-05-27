@@ -73,15 +73,22 @@ The dataset contains customer information such as demographics, purchasing behav
 
 ## 📂 Project Structure
 
-   ```bash
-   m1project_marketing_analysis/
-   │
-   ├── data/                  # Raw and processed data
-   ├── notebooks/             # Jupyter Notebooks
-   ├── images/                # Plots and visualizations
-   ├── README.md              # Project documentation
-   └── marketing_analysis.ipynb  # Main analysis notebook
-   ```
+<pre lang="text">
+m1project_marketing_analysis/
+│
+├── data/                   # Raw and processed data
+|   ├── processed
+|   └── marketingcampaigns_clean.csv
+|   ├── raw
+|   └── marketingcampaigns.csv 
+├── notebooks/              # Jupyter Notebooks
+|   ├── eda.ipynb
+|   └── preprocessing.ipynb
+├── images/                 # Plots and visualizations
+|   └── banner_marketing_dashboard.png   
+└── README.md               # Project documentation
+</pre>
+
 
 ---
 
