@@ -77,10 +77,10 @@ The dataset contains customer information such as demographics, purchasing behav
 m1project_marketing_analysis/
 │
 ├── data/                   # Raw and processed data
-|   ├── processed
-|   └── marketingcampaigns_clean.csv
-|   ├── raw
-|   └── marketingcampaigns.csv 
+|   ├── processed/
+|   |   └── marketingcampaigns_clean.csv
+|   └── raw/
+|       └── marketingcampaigns.csv 
 ├── notebooks/              # Jupyter Notebooks
 |   ├── eda.ipynb
 |   └── preprocessing.ipynb
