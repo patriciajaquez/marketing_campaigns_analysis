@@ -74,6 +74,7 @@ The dataset contains customer information such as demographics, purchasing behav
 ## 📂 Project Structure
 
 m1project_marketing_analysis/
+```bash
 │
 ├── data/                  # Raw and processed data
 ├── notebooks/             # Jupyter Notebooks
