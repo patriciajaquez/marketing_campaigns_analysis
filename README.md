@@ -100,10 +100,12 @@ To generate a similar image:
    git clone https://github.com/patriciajaquez/m1project_marketing_analysis.git
    cd m1project_marketing_analysis
    ```
+
 2. Launch Jupyter Notebook:
    ```bash
    jupyter notebook notebooks/eda.ipynb
    ```
+
 3. Explore the step-by-step analysis in the notebook.
 
 ---
