@@ -4,8 +4,7 @@ import numpy as np
 import plotly.express as px
 
 st.set_page_config(
-    page_title="Marketing Campaigns Data Analysis",
-    page_description="An interactive dashboard for exploring marketing campaign data.",
+    page_title="Marketing Campaigns EDA Dashboard",
     page_icon="📈",
     layout="wide"
 )
@@ -106,7 +105,7 @@ filtered_df = df[
 ].copy()
 
 # --- Dynamic Summary Text ---
-st.title("📈 Marketing Campaigns Data Analysis")
+st.title("📈 Marketing Campaigns EDA Dashboard")
 st.markdown(
     f"""
     <div style='font-size:1.1rem; color:#222; margin-bottom:1em; font-family:Montserrat, sans-serif;'>
