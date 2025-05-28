@@ -1,9 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-
 import plotly.express as px
-import plotly.graph_objects as go
 
 st.set_page_config(
     page_title="Marketing Campaigns EDA Dashboard",
@@ -11,71 +9,66 @@ st.set_page_config(
     layout="wide"
 )
 
-# --- Creative Color Palette ---
-color_map = {
-    "email": "#9b59b6",         # Amethyst
-    "social media": "#16a085",  # Teal
-    "webinar": "#f39c12",       # Orange
-    "podcast": "#e67e22",       # Carrot
-    "promotion": "#e84393",     # Pink Glamour
-    "organic": "#00b894",       # Greenish
-    "paid": "#fdcb6e",          # Sunflower
-    "referral": "#0984e3",      # Blue
-}
-
-# --- Custom CSS for creative look ---
+# --- Professional, Clean CSS ---
 st.markdown("""
     <style>
-    /* Main background */
-    .stApp {
-        background: #f7f7fa;
-    }
-    /* Sidebar background */
+    .stApp { background: #f9f9fb; }
     section[data-testid="stSidebar"] {
-        background: #e9ecef;
+        background: #ffffff;
         color: #222;
+        border-right: 1px solid #e3e6ea;
     }
-    /* Sidebar header and widget labels */
     .stSidebar h1, .stSidebar h2, .stSidebar h3, .stSidebar h4, .stSidebar h5, .stSidebar h6,
     .stSidebar label {
-        color: #2c3e50 !important;
-        font-weight: bold;
-        font-family: 'Montserrat', sans-serif;
-    }
-    /* Tabs */
-    .stTabs [data-baseweb="tab"] {
-        font-size: 1.15rem;
-        color: #2c3e50;
-        font-family: 'Montserrat', sans-serif;
+        color: #1a2634 !important;
         font-weight: 600;
+        font-family: 'Montserrat', sans-serif;
     }
-    /* Metrics */
-    .stMetric {
-        background: #f8f9fa;
-        border-radius: 10px;
-        padding: 10px;
-        box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+    .stMultiSelect, .stSelectbox, .stSlider, .stDateInput {
+        background: #f5f6fa !important;
+        border-radius: 6px !important;
+        border: 1px solid #e3e6ea !important;
     }
-    /* Dataframe */
-    .stDataFrame {
-        background: #f7f7fa;
-    }
-    /* Slider track */
     .stSlider > div[data-baseweb="slider"] > div {
         background: #b0bec5 !important;
     }
-    /* Slider handle */
     .stSlider .rc-slider-handle {
         border-color: #1976d2 !important;
         background: #1976d2 !important;
     }
-    /* Slider active track */
     .stSlider .rc-slider-track {
         background: #1976d2 !important;
+    }
+    .stTabs [data-baseweb="tab"] {
+        font-size: 1.12rem;
+        color: #1a2634;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+    }
+    .stMetric {
+        background: #f5f6fa;
+        border-radius: 10px;
+        padding: 10px;
+        box-shadow: 0 2px 8px rgba(44, 62, 80, 0.06);
+    }
+    .stDataFrame {
+        background: #f9f9fb;
     }
     </style>
 """, unsafe_allow_html=True
 )
+
+# --- Color Map for Channels/Types ---
+color_map = {
+    "email": "#1976d2",
+    "social media": "#26a69a",
+    "webinar": "#f9a825",
+    "podcast": "#8e24aa",
+    "promotion": "#ef5350",
+    "organic": "#388e3c",
+    "paid": "#ffa726",
+    "referral": "#42a5f5",
+}
 
 # --- Load Data ---
 @st.cache_data(ttl=3600)
@@ -114,7 +107,7 @@ filtered_df = df[
 st.title("📈 Marketing Campaigns EDA Dashboard")
 st.markdown(
     f"""
-    <div style='font-size:1.1rem; color:#6c3483; margin-bottom:1em; font-family:Montserrat, sans-serif;'>
+    <div style='font-size:1.1rem; color:#1976d2; margin-bottom:1em; font-family:Montserrat, sans-serif;'>
         <b>{len(filtered_df):,}</b> campaigns selected.
         <b>Channels:</b> {', '.join(selected_channel)} |
         <b>Types:</b> {', '.join(selected_type)} |
@@ -125,8 +118,6 @@ st.markdown(
     </div>
     """, unsafe_allow_html=True
 )
-
-# ...rest of your code remains unchanged...
 
 # --- Tabs ---
 tabs = st.tabs([
@@ -200,20 +191,19 @@ with tabs[2]:
     with col1:
         st.markdown("##### ROI Distribution")
         fig_roi = px.histogram(
-            filtered_df, x="roi", nbins=30, color_discrete_sequence=["#1f77b4"],
+            filtered_df, x="roi", nbins=30, color_discrete_sequence=["#1976d2"],
             title="ROI Distribution"
         )
         st.plotly_chart(fig_roi, use_container_width=True)
     with col2:
         st.markdown("##### Revenue Distribution")
         fig_rev = px.histogram(
-            filtered_df, x="revenue", nbins=30, color_discrete_sequence=["#2ca02c"],
+            filtered_df, x="revenue", nbins=30, color_discrete_sequence=["#26a69a"],
             title="Revenue Distribution"
         )
         st.plotly_chart(fig_rev, use_container_width=True)
 
     st.markdown("##### Budget vs Revenue")
-    # Ensure all sizes are positive and non-zero
     roi_for_size = filtered_df['roi'].abs() + 0.01
     fig_scatter = px.scatter(
         filtered_df, x="budget", y="revenue", color="channel",
@@ -230,7 +220,7 @@ with tabs[3]:
         st.markdown("##### Conversion Rate by Audience")
         fig_conv_aud = px.box(
             filtered_df, x="target_audience", y="conversion_rate", color="target_audience",
-            color_discrete_sequence=["#1f77b4", "#ff7f0e"],
+            color_discrete_sequence=["#1976d2", "#26a69a"],
             title="Conversion Rate by Audience"
         )
         st.plotly_chart(fig_conv_aud, use_container_width=True)
@@ -238,7 +228,7 @@ with tabs[3]:
         st.markdown("##### ROI by Audience")
         fig_roi_aud = px.box(
             filtered_df, x="target_audience", y="roi", color="target_audience",
-            color_discrete_sequence=["#1f77b4", "#ff7f0e"],
+            color_discrete_sequence=["#1976d2", "#26a69a"],
             title="ROI by Audience"
         )
         st.plotly_chart(fig_roi_aud, use_container_width=True)
@@ -290,21 +280,67 @@ with tabs[5]:
     st.subheader("Insights & Recommendations")
     st.markdown("""
     ### Key Insights
-    - **Email campaigns** have the highest median ROI, while **social media** is the most used channel.
-    - **Webinars** generate the highest average revenue; **emails** have the best conversion rates.
-    - **Organic channels** consistently outperform paid and promotional channels in ROI.
-    - **B2B campaigns** have higher median ROI; **B2C** have higher conversion rates.
-    - **Seasonality:** Campaigns launched in Q2 and Q4 show higher ROI and revenue.
-    - **High-performing campaigns** (ROI > 0.5 and revenue > $500,000) are mostly organic, email-based, and have moderate budgets.
-    - **Longer campaigns** do not necessarily yield higher ROI.
+    1. **Marketing Channel Effectiveness:**  
+       - **Promotion** is the most frequently used marketing channel.
+       - **Organic** campaigns have the highest average ROI, while **paid** campaigns have the highest median ROI.
+
+    2. **Campaign Type Performance:**  
+       - **Social media** campaigns generate the highest average revenue.
+       - **Webinar** campaigns achieve the highest average conversion rates.
+
+    3. **ROI Distribution:**  
+       - ROI is highly skewed, with most campaigns achieving low ROI and a few outliers reaching very high ROI.
+       - ROI is moderately negatively correlated with budget, indicating that increasing budget does not guarantee higher ROI.
+       - There is little to no correlation between ROI and conversion rate.
+
+    4. **Audience Analysis:**  
+       - There is **no statistically significant difference** in conversion rates between B2B and B2C audiences (t-test p-value = 0.32).
+       - The median conversion rates for both groups are also very similar.
+
+    5. **Top Net Profit Campaign:**  
+       - The campaign with the highest net profit is **"advanced systematic complexity"**, an organic podcast campaign.
+       - Its success is driven by exceptionally high ROI, moderate conversion rate, and use of the organic channel.
+
+    6. **Budget and Revenue Correlation:**  
+       - There is a positive relationship between budget and revenue, but the relationship is widely dispersed, suggesting other factors also influence revenue.
+
+    7. **High-Performance Campaigns:**  
+       - There are **534 campaigns** with ROI > 0.5 and revenue > $500,000.
+       - These are most frequently associated with **organic** and **promotion** channels, and span various types (email, social media, webinar, podcast).
+
+    8. **Temporal Patterns:**  
+       - The highest average ROI occurs in Q1 and Q4, with Q1 strong for promotion and Q4 for organic channels.
+       - Average revenue peaks in Q2 and Q3.
+       - ROI shows monthly peaks in January and November, indicating seasonal effects.
+
+    ---
 
     ### Recommendations
-    1. **Prioritize email and organic campaigns** for higher ROI.
-    2. **Focus on webinars for revenue** and emails for conversion rates.
-    3. **Tailor campaigns:** B2B for ROI, B2C for conversion.
-    4. **Optimize budget allocation** to maximize ROI and conversion.
-    5. **Schedule major campaigns in Q2 and Q4** to leverage seasonal peaks.
-    6. **Replicate traits of high-performing campaigns** (moderate budget, organic/email).
+
+    1. **Channel Optimization:**  
+       - Focus on **promotion** and **organic** channels for higher ROI.
+       - Reallocate budget from underperforming channels.
+
+    2. **Campaign Type Strategy:**  
+       - Prioritize **social media** campaigns for revenue and **webinar** campaigns for conversion rates.
+
+    3. **Audience Targeting:**  
+       - Since B2B and B2C audiences show similar conversion rates, tailor messaging and offers to specific segments rather than expecting large performance differences.
+
+    4. **Budget Allocation:**  
+       - Invest in campaigns with proven ROI and monitor for diminishing returns as budget increases.
+
+    5. **Seasonal Planning:**  
+       - Schedule major campaigns in **Q1, Q2, Q3, and Q4** to leverage seasonal performance peaks, especially for promotion and organic channels.
+
+    6. **Replication of High-Performance Campaigns:**  
+       - Analyze and replicate the characteristics of top net profit campaigns—such as focusing on organic podcasts and balancing ROI with conversion rate—to maximize future profitability.
+
+    7. **Diversify Campaign Types:**  
+       - High-performing campaigns span multiple types; continue to diversify across email, social media, webinar, and podcast formats.
+
+    8. **Monitor Outliers and Skew:**  
+       - Regularly review outlier campaigns to understand what drives exceptional performance or losses, and adjust strategies accordingly.
     """)
 
     st.markdown("---")
