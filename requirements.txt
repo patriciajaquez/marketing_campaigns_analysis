@@ -6,3 +6,4 @@ datetime
 scipy
 fuzzywuzzy
 python-Levenshtein
+missingno
