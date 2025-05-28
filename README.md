@@ -1,6 +1,6 @@
 # 📈 Marketing Campaign Analysis
 
-![Dashboard Banner](/Users/patriciajaquez/Documents/GitHub/module1_project/img/banner_marketing_dashboard.png)
+![Dashboard Banner](./img/banner_marketing_dashboard.png)
 
 Final project for **Module 1** of the **Data Analyst & AI Bootcamp** at Upgrade Hub.
 
