@@ -51,6 +51,9 @@ The dataset contains **1,005 marketing campaigns** with the following attributes
 - `Python`, `Pandas`, `NumPy`
 - `Matplotlib`, `Seaborn`
 - `Jupyter Notebook`
+- `missingno`
+- `scipy`
+- `fuzzywuzzy`
 
 ---
 
@@ -95,15 +98,40 @@ To generate a similar image:
 ## ▶️ How to Run the Project
 
 1. Clone the repo:
-```bash
-git clone https://github.com/patriciajaquez/m1project_marketing_analysis.git
-cd m1project_marketing_analysis
-```
+   ```bash
+   git clone https://github.com/patriciajaquez/m1project_marketing_analysis.git
+   cd m1project_marketing_analysis
+   ```
 2. Launch Jupyter Notebook:
-```bash
-jupyter notebook notebooks/eda.ipynb
-```
+   ```bash
+   jupyter notebook notebooks/eda.ipynb
+   ```
 3. Explore the step-by-step analysis in the notebook.
+
+---
+
+## 📊 Interactive EDA App
+
+You can explore the marketing campaign data interactively using the Streamlit dashboard:
+
+### How to launch the app
+
+1. Make sure you have all dependencies installed:
+   ```bash
+   pip install -r requirements.txt
+   ```
+(Or manually install: streamlit, pandas, matplotlib, seaborn)
+2. Run the Streamlit app:
+   ```bash
+   streamlit run eda_app.py
+   ```
+3. Use the sidebar filters to select channels and target audiences, and explore ROI distributions and other visualizations.
+
+**Features:**
+  - Filter campaigns by channel and target audience
+  - Visualize ROI by channel (boxplot)
+  - View filtered data in a table
+  - Easily extend with more visualizations
 
 ---
 
@@ -111,6 +139,7 @@ jupyter notebook notebooks/eda.ipynb
 
 Patricia Jáquez
 Data Analyst & AI Bootcamp – Upgrade Hub
+
 🔗[LinkedIn](https://www.linkedin.com/in/patricia-jaquez/)
 
 ---
