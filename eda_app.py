@@ -4,27 +4,62 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 
-# --- Color Palette (Marketing Psychology) ---
+# --- Creative Color Palette ---
 color_map = {
-    "email": "#1f77b4",         # Blue: trust, communication
-    "social media": "#2ca02c",  # Green: growth, success
-    "webinar": "#ff7f0e",       # Orange: creativity, energy
-    "podcast": "#9467bd",       # Purple: innovation, wisdom
-    "promotion": "#e377c2",     # Pink: excitement
-    "organic": "#17becf",       # Teal: reliability
-    "paid": "#8c564b",          # Brown: stability
-    "referral": "#bcbd22",      # Olive: connection
+    "email": "#9b59b6",         # Amethyst
+    "social media": "#16a085",  # Teal
+    "webinar": "#f39c12",       # Orange
+    "podcast": "#e67e22",       # Carrot
+    "promotion": "#e84393",     # Pink Glamour
+    "organic": "#00b894",       # Greenish
+    "paid": "#fdcb6e",          # Sunflower
+    "referral": "#0984e3",      # Blue
 }
+
+# --- Custom CSS for creative look ---
+st.markdown("""
+    <style>
+    /* Main background */
+    .stApp {
+        background: linear-gradient(135deg, #f8fafc 0%, #e0c3fc 100%);
+    }
+    /* Sidebar background */
+    section[data-testid="stSidebar"] {
+        background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+        color: #222;
+    }
+    /* Sidebar header and widget labels */
+    .stSidebar h1, .stSidebar h2, .stSidebar h3, .stSidebar h4, .stSidebar h5, .stSidebar h6,
+    .stSidebar label {
+        color: #6c3483 !important;
+        font-weight: bold;
+        font-family: 'Montserrat', sans-serif;
+    }
+    /* Tabs */
+    .stTabs [data-baseweb="tab"] {
+        font-size: 1.15rem;
+        color: #6c3483;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+    }
+    /* Metrics */
+    .stMetric {
+        background: #fffbe7;
+        border-radius: 10px;
+        padding: 10px;
+        box-shadow: 0 2px 8px rgba(200, 170, 255, 0.08);
+    }
+    /* Dataframe */
+    .stDataFrame {
+        background: #f8fafc;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 st.set_page_config(
     page_title="Marketing Campaigns EDA Dashboard",
-    page_icon="📈",
+    page_icon="🌈",
     layout="wide"
-)
-
-st.markdown(
-    "<style>body {font-family: 'Segoe UI', Arial, sans-serif;} .stTabs [data-baseweb='tab'] {font-size: 1.1rem;}</style>",
-    unsafe_allow_html=True,
 )
 
 # --- Load Data ---
@@ -38,7 +73,7 @@ def load_data():
 df = load_data()
 
 # --- Sidebar Filters ---
-st.sidebar.header("🔎 Filter Campaigns")
+st.sidebar.header("🎨 Creative Campaign Filters")
 channels = df['channel'].unique().tolist()
 types = df['type'].unique().tolist()
 audiences = df['target_audience'].unique().tolist()
@@ -61,10 +96,10 @@ filtered_df = df[
 ].copy()
 
 # --- Dynamic Summary Text ---
-st.title("📈 Marketing Campaigns EDA Dashboard")
+st.title("🌈 Creative Marketing Campaigns EDA Dashboard")
 st.markdown(
     f"""
-    <div style='font-size:1.1rem; color:#444; margin-bottom:1em;'>
+    <div style='font-size:1.1rem; color:#6c3483; margin-bottom:1em; font-family:Montserrat, sans-serif;'>
         <b>{len(filtered_df):,}</b> campaigns selected.
         <b>Channels:</b> {', '.join(selected_channel)} |
         <b>Types:</b> {', '.join(selected_type)} |
