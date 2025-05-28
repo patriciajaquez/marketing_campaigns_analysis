@@ -98,7 +98,7 @@ filtered_df = df[
 ].copy()
 
 # --- Dynamic Summary Text ---
-st.title("🌈 Creative Marketing Campaigns EDA Dashboard")
+st.title("📈 Marketing Campaigns EDA Dashboard")
 st.markdown(
     f"""
     <div style='font-size:1.1rem; color:#6c3483; margin-bottom:1em; font-family:Montserrat, sans-serif;'>
