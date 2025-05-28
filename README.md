@@ -52,6 +52,8 @@ The dataset contains **1,005 marketing campaigns** with the following attributes
 - `missingno`
 - `scipy`
 - `fuzzywuzzy`
+- `streamlit`
+- `plotly`
 
 ---
 
