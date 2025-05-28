@@ -110,7 +110,7 @@ m1project_marketing_analysis/
 
 Patricia Jáquez
 Data Analyst & AI Bootcamp – Upgrade Hub
-🔗 LinkedIn
+🔗 LinkedIn (https://www.linkedin.com/in/patricia-jaquez/)
 
 ⸻
 
