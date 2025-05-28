@@ -73,7 +73,7 @@ The dataset contains customer information such as demographics, purchasing behav
 
 ## 📂 Project Structure
 
-<pre lang="text">
+```
 m1project_marketing_analysis/
 │
 ├── data/                   # Raw and processed data
@@ -87,7 +87,7 @@ m1project_marketing_analysis/
 ├── images/                 # Plots and visualizations
 |   └── banner_marketing_dashboard.png   
 └── README.md               # Project documentation
-</pre>
+```
 
 
 ---
