@@ -1,121 +1,120 @@
-# 📊 Marketing Campaign Analysis
+# 📈 Marketing Campaign Analysis
 
-![Dashboard Banner](./img/banner_marketing_dashboard.png)
+![Dashboard Banner](./images/banner_marketing_dashboard.png)
 
 Final project for **Module 1** of the **Data Analyst & AI Bootcamp** at Upgrade Hub.
 
-This project analyzes a dataset from a marketing campaign to uncover insights about customer behavior, product preferences, and campaign effectiveness. It includes data cleaning, exploration, visualization, and basic feature engineering, following best practices in data analytics.
+This project focuses on analyzing the performance of various marketing campaigns, including their return on investment (ROI), conversion rates, and revenue outcomes. It uses exploratory data analysis (EDA) techniques to extract meaningful insights that can inform future marketing strategies.
 
 ---
 
-## 🧠 Objectives
+## 🎯 Project Objectives
 
-- Perform **exploratory data analysis (EDA)** on customer and campaign data.
-- Identify **key trends** and **segmentation opportunities**.
-- Apply **data visualization** techniques to communicate findings clearly.
-- Draw **actionable insights** to support marketing decision-making.
-
----
-
-## 🖼️ Dashboard Banner Image
-
-The banner was generated using AI (DALL·E) with the following prompt:
-A dashboard-style layout with dynamic marketing analytics displayed against a dark backdrop, featuring charts and graphs in vibrant shades of blue, orange, green, and teal. Includes pie chart, donut chart, bar graphs, and line graph. Clean and modern design.
-
-To generate a similar image:
-- Use [DALL·E](https://openai.com/dall-e) or a Stable Diffusion interface.
-- Set your aspect ratio to **landscape** or **wide**.
-- Include keywords like “dashboard”, “marketing analytics”, and “data visualization”.
-- Add `no text` or `no labels` to avoid unwanted text in the image.
+- Analyze and visualize marketing campaign data.
+- Identify top-performing and underperforming campaign types and channels.
+- Compare ROI and conversion rates across different campaign segments.
+- Categorize campaigns based on budget and effectiveness for better decision-making.
 
 ---
 
-## 🗃️ Dataset
+## 📊 Dataset Overview
 
-The dataset contains customer information such as demographics, purchasing behavior, and responses to marketing campaigns.
+The dataset contains **1,005 marketing campaigns** with the following attributes:
 
-**Key features include:**
-- Age, education, income, marital status
-- Product categories (wine, meat, gold, etc.)
-- Marketing campaign responses
-- Spending and purchasing patterns
+- **Campaign Details**: `campaign_name`, `start_date`, `end_date`, `type`, `channel`, `target_audience`
+- **Performance Metrics**: `budget`, `roi`, `revenue`, `net_profit`, `conversion_rate`, `cost_per_conversion`
+- **Categorical Features**: `roi_category`, `conversion_category`, `high_budget_flag`, `high_roi_flag`
+- **Date Features**: `start_year`, `start_month`, `start_quarter`
 
 ---
 
-## 🧹 Data Cleaning & Preprocessing
+## 🧹 Data Preparation
 
-- Missing values treated
-- Outliers handled
-- Feature formatting and transformation
-- Created new variables for analysis (e.g., total spend, customer profile scores)
+- Treated missing values and handled outliers.
+- Extracted temporal features from campaign start dates.
+- Created new features like ROI and conversion categories.
+- Engineered flags for high-budget and high-ROI campaigns.
+
+---
+
+## 📊 Key Insights
+
+- **Email** and **social media** campaigns show the highest ROI on average.
+- **B2C** campaigns tend to have higher conversion rates compared to **B2B**.
+- **Organic** and **promotion** channels outperform **paid** in ROI.
+- Most campaigns with high budget do not guarantee high performance.
 
 ---
 
 ## 📈 Tools & Libraries
 
-- `Python`
-- `Pandas`
-- `NumPy`
-- `Matplotlib`
-- `Seaborn`
+- `Python`, `Pandas`, `NumPy`
+- `Matplotlib`, `Seaborn`
 - `Jupyter Notebook`
 
 ---
 
-## 📊 Key Findings
-
-- **Best customer profiles** based on spending and campaign responsiveness
-- Differences in product preferences by **age**, **income**, and **marital status**
-- **Underperforming campaign segments** and improvement opportunities
-- Visualization of correlations, distributions, and customer segmentation
-
----
-
-## 📂 Project Structure
+## 📁 Project Structure
 
 <pre lang="text">
 m1project_marketing_analysis/
 │
-├── data/                   # Raw and processed data
-|   ├── processed/
-|   |   └── marketingcampaigns_clean.csv
-|   └── raw/
-|       └── marketingcampaigns.csv 
-├── notebooks/              # Jupyter Notebooks
-|   ├── eda.ipynb
-|   └── preprocessing.ipynb
-├── images/                 # Plots and visualizations
-|   └── banner_marketing_dashboard.png   
-└── README.md               # Project documentation
+├── data/
+│   ├── raw/
+│   │   └── marketingcampaigns.csv
+│   └── processed/
+│       └── marketingcampaigns_clean.csv
+│
+├── notebooks/
+│   ├── eda.ipynb
+│   └── preprocessing.ipynb
+│
+├── images/
+│   └── banner_marketing_dashboard.png
+│
+├── eda_app.py
+│ 
+└── README.md
 </pre>
-
 
 ---
 
-## 📌 How to Run
+## 🧠 Dashboard Banner
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/patriciajaquez/m1project_marketing_analysis.git
-   cd m1project_marketing_analysis
+The image was generated using **DALL·E** with this prompt:
 
-2.	Open the Jupyter notebook:
-    jupyter notebook notebooks/marketing_analysis.ipynb
+> A dashboard-style layout with dynamic marketing analytics displayed against a dark backdrop, featuring charts and graphs in vibrant shades of blue, orange, green, and teal. Includes pie chart, donut chart, bar graphs, and line graph. Clean and modern design. No text or labels.
 
-3.	Follow the step-by-step analysis in the notebook.
+To generate a similar image:
+- Use [DALL·E](https://openai.com/dall-e) or Stable Diffusion.
+- Specify "no text", "dashboard", "marketing analytics", and "data visualization" in the prompt.
+- Choose a **wide format** (website banner style).
 
-⸻
+---
+
+## ▶️ How to Run the Project
+
+1. Clone the repo:
+```bash
+git clone https://github.com/patriciajaquez/m1project_marketing_analysis.git
+cd m1project_marketing_analysis
+```
+2. Launch Jupyter Notebook:
+```bash
+jupyter notebook notebooks/eda.ipynb
+```
+3. Explore the step-by-step analysis in the notebook.
+
+---
 
 👩‍💻 Author
 
 Patricia Jáquez
 Data Analyst & AI Bootcamp – Upgrade Hub
-🔗 LinkedIn
+[LinkedIn](https://www.linkedin.com/in/patricia-jaquez/)
 
-⸻
+---
 
 📝 License
 
-This project is shared for educational purposes as part of the Upgrade Hub Bootcamp. Feel free to use and adapt it with proper attribution.
-
-⸻
+This project is part of a Bootcamp and intended for educational purposes. Feel free to use or adapt it with proper attribution.
