@@ -5,6 +5,12 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 
+st.set_page_config(
+    page_title="Marketing Campaigns EDA Dashboard",
+    page_icon="🌈",
+    layout="wide"
+)
+
 # --- Creative Color Palette ---
 color_map = {
     "email": "#9b59b6",         # Amethyst
@@ -55,12 +61,7 @@ st.markdown("""
         background: #f8fafc;
     }
     </style>
-""", unsafe_allow_html=True)
-
-st.set_page_config(
-    page_title="Marketing Campaigns EDA Dashboard",
-    page_icon="🌈",
-    layout="wide"
+""", unsafe_allow_html=True
 )
 
 # --- Load Data ---
