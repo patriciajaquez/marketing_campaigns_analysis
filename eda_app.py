@@ -29,15 +29,16 @@ st.markdown("""
         border-radius: 6px !important;
         border: 1px solid #e3e6ea !important;
     }
+    /* Make slider track and background lighter and neutral */
     .stSlider > div[data-baseweb="slider"] > div {
-        background: #b0bec5 !important;
+        background: #f5f6fa !important;
     }
     .stSlider .rc-slider-handle {
-        border-color: #1976d2 !important;
-        background: #1976d2 !important;
+        border-color: #888 !important;
+        background: #888 !important;
     }
     .stSlider .rc-slider-track {
-        background: #1976d2 !important;
+        background: #888 !important;
     }
     .stTabs [data-baseweb="tab"] {
         font-size: 1.12rem;
@@ -107,7 +108,7 @@ filtered_df = df[
 st.title("📈 Marketing Campaigns EDA Dashboard")
 st.markdown(
     f"""
-    <div style='font-size:1.1rem; color:#1976d2; margin-bottom:1em; font-family:Montserrat, sans-serif;'>
+    <div style='font-size:1.1rem; color:#222; margin-bottom:1em; font-family:Montserrat, sans-serif;'>
         <b>{len(filtered_df):,}</b> campaigns selected.
         <b>Channels:</b> {', '.join(selected_channel)} |
         <b>Types:</b> {', '.join(selected_type)} |
