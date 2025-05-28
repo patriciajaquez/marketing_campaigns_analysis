@@ -28,37 +28,50 @@ st.markdown("""
     <style>
     /* Main background */
     .stApp {
-        background: linear-gradient(135deg, #f8fafc 0%, #e0c3fc 100%);
+        background: #f7f7fa;
     }
     /* Sidebar background */
     section[data-testid="stSidebar"] {
-        background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+        background: #e9ecef;
         color: #222;
     }
     /* Sidebar header and widget labels */
     .stSidebar h1, .stSidebar h2, .stSidebar h3, .stSidebar h4, .stSidebar h5, .stSidebar h6,
     .stSidebar label {
-        color: #6c3483 !important;
+        color: #2c3e50 !important;
         font-weight: bold;
         font-family: 'Montserrat', sans-serif;
     }
     /* Tabs */
     .stTabs [data-baseweb="tab"] {
         font-size: 1.15rem;
-        color: #6c3483;
+        color: #2c3e50;
         font-family: 'Montserrat', sans-serif;
         font-weight: 600;
     }
     /* Metrics */
     .stMetric {
-        background: #fffbe7;
+        background: #f8f9fa;
         border-radius: 10px;
         padding: 10px;
-        box-shadow: 0 2px 8px rgba(200, 170, 255, 0.08);
+        box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
     }
     /* Dataframe */
     .stDataFrame {
-        background: #f8fafc;
+        background: #f7f7fa;
+    }
+    /* Slider track */
+    .stSlider > div[data-baseweb="slider"] > div {
+        background: #b0bec5 !important;
+    }
+    /* Slider handle */
+    .stSlider .rc-slider-handle {
+        border-color: #1976d2 !important;
+        background: #1976d2 !important;
+    }
+    /* Slider active track */
+    .stSlider .rc-slider-track {
+        background: #1976d2 !important;
     }
     </style>
 """, unsafe_allow_html=True
