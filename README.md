@@ -2,8 +2,6 @@
 
 ![Dashboard Banner](./img/banner_marketing_dashboard.png)
 
-Final project for **Module 1** of the **Data Analyst & AI Bootcamp** at Upgrade Hub.
-
 This project focuses on analyzing the performance of various marketing campaigns, including their return on investment (ROI), conversion rates, and revenue outcomes. It uses exploratory data analysis (EDA) techniques to extract meaningful insights that can inform future marketing strategies.
 
 ---
