@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 
 st.set_page_config(
     page_title="Marketing Campaigns EDA Dashboard",
-    page_icon="🌈",
+    page_icon="📈",
     layout="wide"
 )
 
@@ -75,7 +75,7 @@ def load_data():
 df = load_data()
 
 # --- Sidebar Filters ---
-st.sidebar.header("🎨 Creative Campaign Filters")
+st.sidebar.header("📊 Campaign Filters")
 channels = df['channel'].unique().tolist()
 types = df['type'].unique().tolist()
 audiences = df['target_audience'].unique().tolist()
@@ -200,9 +200,11 @@ with tabs[2]:
         st.plotly_chart(fig_rev, use_container_width=True)
 
     st.markdown("##### Budget vs Revenue")
+    # Ensure all sizes are positive and non-zero
+    roi_for_size = filtered_df['roi'].abs() + 0.01
     fig_scatter = px.scatter(
         filtered_df, x="budget", y="revenue", color="channel",
-        color_discrete_map=color_map, size="roi", hover_data=["campaign_name"],
+        color_discrete_map=color_map, size=roi_for_size, hover_data=["campaign_name"],
         title="Budget vs Revenue by Channel"
     )
     st.plotly_chart(fig_scatter, use_container_width=True)
