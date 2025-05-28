@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+
 import plotly.express as px
 import plotly.graph_objects as go
 
@@ -111,6 +112,8 @@ st.markdown(
     """, unsafe_allow_html=True
 )
 
+# ...rest of your code remains unchanged...
+
 # --- Tabs ---
 tabs = st.tabs([
     "📊 Overview",
@@ -198,7 +201,7 @@ with tabs[2]:
     st.markdown("##### Budget vs Revenue")
     fig_scatter = px.scatter(
         filtered_df, x="budget", y="revenue", color="channel",
-        color_discrete_map=color_map, size=filtered_df['roi'].abs(), hover_data=["campaign_name"],
+        color_discrete_map=color_map, size="roi", hover_data=["campaign_name"],
         title="Budget vs Revenue by Channel"
     )
     st.plotly_chart(fig_scatter, use_container_width=True)
