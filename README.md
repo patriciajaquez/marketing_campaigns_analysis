@@ -111,7 +111,7 @@ jupyter notebook notebooks/eda.ipynb
 
 Patricia Jáquez
 Data Analyst & AI Bootcamp – Upgrade Hub
-[LinkedIn](https://www.linkedin.com/in/patricia-jaquez/)
+🔗[LinkedIn](https://www.linkedin.com/in/patricia-jaquez/)
 
 ---
 
