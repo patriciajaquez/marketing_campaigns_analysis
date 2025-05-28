@@ -100,12 +100,10 @@ To generate a similar image:
    git clone https://github.com/patriciajaquez/m1project_marketing_analysis.git
    cd m1project_marketing_analysis
    ```
-
 2. Launch Jupyter Notebook:
    ```bash
    jupyter notebook notebooks/eda.ipynb
    ```
-
 3. Explore the step-by-step analysis in the notebook.
 
 ---
@@ -120,7 +118,7 @@ You can explore the marketing campaign data interactively using the Streamlit da
    ```bash
    pip install -r requirements.txt
    ```
-(Or manually install: streamlit, pandas, matplotlib, seaborn)
+   (Or manually install: streamlit, pandas, matplotlib, seaborn)
 2. Run the Streamlit app:
    ```bash
    streamlit run eda_app.py
