@@ -132,6 +132,7 @@ tabs = st.tabs([
 
 # --- Tab 1: Overview ---
 with tabs[0]:
+    st.info("**Visión general del dataset filtrado: muestra métricas clave y la distribución de campañas por canal y tipo.**")
     st.subheader("Dataset Overview")
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("Total Campaigns", len(filtered_df))
@@ -157,6 +158,7 @@ with tabs[0]:
 
 # --- Tab 2: Channel & Type Analysis ---
 with tabs[1]:
+    st.info("**Compara el desempeño de canales y tipos de campaña en términos de ROI, ingresos y tasa de conversión.**")
     st.subheader("Channel & Type Performance")
     col1, col2 = st.columns(2)
     with col1:
@@ -187,6 +189,7 @@ with tabs[1]:
 
 # --- Tab 3: ROI & Revenue ---
 with tabs[2]:
+    st.info("**Analiza la distribución de ROI e ingresos, y la relación entre presupuesto e ingresos.**")
     st.subheader("ROI & Revenue Analysis")
     col1, col2 = st.columns(2)
     with col1:
@@ -215,6 +218,7 @@ with tabs[2]:
 
 # --- Tab 4: Audience & Conversion ---
 with tabs[3]:
+    st.info("**Compara el desempeño entre audiencias B2B y B2C, y muestra las campañas más rentables.**")
     st.subheader("Audience & Conversion Analysis")
     col1, col2 = st.columns(2)
     with col1:
@@ -245,6 +249,7 @@ with tabs[3]:
 
 # --- Tab 5: Temporal Patterns ---
 with tabs[4]:
+    st.info("**Explora patrones temporales y estacionales en el desempeño de las campañas.**")
     st.subheader("Temporal & Seasonal Patterns")
     filtered_df['start_month'] = pd.to_datetime(filtered_df['start_date']).dt.month
     filtered_df['start_quarter'] = pd.to_datetime(filtered_df['start_date']).dt.quarter
@@ -278,6 +283,7 @@ with tabs[4]:
 
 # --- Tab 6: Insights & Recommendations ---
 with tabs[5]:
+    st.info("**Resumen de hallazgos clave y recomendaciones accionables basadas en el análisis.**")
     st.subheader("Insights & Recommendations")
     st.markdown("""
     ### Key Insights
