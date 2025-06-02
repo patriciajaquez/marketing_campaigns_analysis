@@ -119,6 +119,16 @@ st.markdown(
     """, unsafe_allow_html=True
 )
 
+# --- Create Tabs ---
+tabs = st.tabs([
+    "📊 Overview",
+    "📈 Channel & Type Analysis",
+    "💰 ROI & Revenue",
+    "👥 Audience & Conversion",
+    "🗓️ Temporal Patterns",
+    "📝 Insights & Recommendations"
+])
+
 # --- Tab 1: Overview ---
 with tabs[0]:
     st.info("**General Overview Of The Filtered Dataset: Shows Key Metrics And The Distribution Of Campaigns By Channel And Type.**")
