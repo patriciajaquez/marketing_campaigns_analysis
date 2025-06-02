@@ -58,6 +58,18 @@ st.markdown("""
 """, unsafe_allow_html=True
 )
 
+# --- Color Map for Channels ---
+color_map = {
+    "email": "#1976d2",
+    "social media": "#26a69a",
+    "webinar": "#f9a825",
+    "podcast": "#8e24aa",
+    "promotion": "#ef5350",
+    "organic": "#388e3c",
+    "paid": "#ffa726",
+    "referral": "#42a5f5",
+}
+
 # --- Load Data ---
 @st.cache_data(ttl=3600)
 def load_data():
