@@ -206,14 +206,19 @@ with tabs[2]:
         )
         st.plotly_chart(fig_rev, use_container_width=True)
 
-    st.markdown("##### Budget vs Revenue")
-    roi_for_size = filtered_df['roi'].abs() + 0.01
-    fig_scatter = px.scatter(
-        filtered_df, x="budget", y="revenue", color="channel",
-        color_discrete_map=color_map, size=roi_for_size, hover_data=["campaign_name"],
-        title="Budget vs Revenue by Channel"
+    st.markdown("##### Average Revenue vs Budget by Channel")
+    avg_budget_revenue = filtered_df.groupby('channel').agg(
+        avg_budget=('budget', 'mean'),
+        avg_revenue=('revenue', 'mean')
+    ).reset_index()
+    fig_avg = px.bar(
+        avg_budget_revenue, x="channel", y="avg_revenue", color="channel",
+        color_discrete_map=color_map, text="avg_budget",
+        title="Average Revenue vs Budget by Channel",
+        labels={"avg_revenue": "Average Revenue", "avg_budget": "Average Budget"}
     )
-    st.plotly_chart(fig_scatter, use_container_width=True)
+    fig_avg.update_traces(texttemplate='$%{text:,.0f}', textposition='outside')
+    st.plotly_chart(fig_avg, use_container_width=True)
 
 # --- Tab 4: Audience & Conversion ---
 with tabs[3]:
