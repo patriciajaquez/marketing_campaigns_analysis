@@ -128,11 +128,15 @@ with tabs[0]:
     col4.metric("Avg. Conversion Rate", f"{filtered_df['conversion_rate'].mean():.2%}")
 
     st.markdown("#### Channel Distribution")
+    channel_counts = filtered_df['channel'].value_counts().reset_index()
+    channel_counts.columns = ['channel', 'count']  # Rename columns for clarity
     fig_channel = px.bar(
-        filtered_df['channel'].value_counts().reset_index(),
-        x='index', y='channel', color='index',
+        channel_counts,
+        x='channel',  # Correct column name
+        y='count',    # Correct column name
+        color='channel',
         title="Number of Campaigns by Channel",
-        labels={'index': 'Channel', 'channel': 'Number of Campaigns'},
+        labels={'channel': 'Channel', 'count': 'Number of Campaigns'},
         color_discrete_sequence=px.colors.qualitative.Set2
     )
     st.plotly_chart(fig_channel, use_container_width=True)
