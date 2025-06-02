@@ -142,11 +142,15 @@ with tabs[0]:
     st.plotly_chart(fig_channel, use_container_width=True)
 
     st.markdown("#### Campaign Type Distribution")
+    type_counts = filtered_df['type'].value_counts().reset_index()
+    type_counts.columns = ['type', 'count']  # Rename columns for clarity
     fig_type = px.bar(
-        filtered_df['type'].value_counts().reset_index(),
-        x='index', y='type', color='index',
+        type_counts,
+        x='type',  # Correct column name
+        y='count',  # Correct column name
+        color='type',
         title="Number of Campaigns by Type",
-        labels={'index': 'Type', 'type': 'Number of Campaigns'},
+        labels={'type': 'Campaign Type', 'count': 'Number of Campaigns'},
         color_discrete_sequence=px.colors.qualitative.Set2
     )
     st.plotly_chart(fig_type, use_container_width=True)
