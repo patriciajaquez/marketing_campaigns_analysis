@@ -187,22 +187,27 @@ with tabs[1]:
     st.plotly_chart(fig_conv, use_container_width=True)
 
 # --- Tab 3: ROI & Revenue ---
+# --- Tab 3: ROI & Revenue ---
 with tabs[2]:
     st.info("**Analyze the distribution of ROI and revenue, and the relationship between budget and revenue.**")
     st.subheader("ROI & Revenue Analysis")
     col1, col2 = st.columns(2)
     with col1:
         st.markdown("##### ROI Distribution")
-        fig_roi = px.histogram(
-            filtered_df, x="roi", nbins=30, color_discrete_sequence=["#1976d2"],
-            title="ROI Distribution"
+        fig_roi = px.box(
+            filtered_df, y="roi", color_discrete_sequence=["#1976d2"],
+            title="ROI Distribution",
+            points="all",  # Show all points to highlight outliers
+            labels={"roi": "Return on Investment (ROI)"}
         )
         st.plotly_chart(fig_roi, use_container_width=True)
     with col2:
         st.markdown("##### Revenue Distribution")
-        fig_rev = px.histogram(
-            filtered_df, x="revenue", nbins=30, color_discrete_sequence=["#26a69a"],
-            title="Revenue Distribution"
+        fig_rev = px.box(
+            filtered_df, y="revenue", color_discrete_sequence=["#26a69a"],
+            title="Revenue Distribution",
+            points="all",  # Show all points to highlight outliers
+            labels={"revenue": "Revenue"}
         )
         st.plotly_chart(fig_rev, use_container_width=True)
 
