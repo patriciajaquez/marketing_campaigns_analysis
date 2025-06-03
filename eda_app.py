@@ -73,34 +73,44 @@ color_map = {
 @st.cache_data(ttl=3600)
 def load_data():
     df = pd.read_csv("data/processed/marketingcampaigns_clean.csv")
-    df['start_date'] = pd.to_datetime(df['start_date'])
-    df['end_date'] = pd.to_datetime(df['end_date'])
+    df['Start Date'] = pd.to_datetime(df['Start Date'])
+    df['End Date'] = pd.to_datetime(df['End Date'])
     return df
 
 df = load_data()
 
 # --- Sidebar Filters ---
 st.sidebar.header("📊 Campaign Filters")
-channels = df['channel'].unique().tolist()
-types = df['type'].unique().tolist()
-audiences = df['target_audience'].unique().tolist()
+channels = df['Channel'].unique().tolist()
+types = df['Type'].unique().tolist()
+audiences = df['Target Audience'].unique().tolist()
 
 selected_channel = st.sidebar.multiselect("Channel", options=channels, default=channels)
 selected_type = st.sidebar.multiselect("Campaign Type", options=types, default=types)
 selected_audience = st.sidebar.multiselect("Target Audience", options=audiences, default=audiences)
-roi_range = st.sidebar.slider("ROI Range", float(df['roi'].min()), float(df['roi'].max()), (float(df['roi'].min()), float(df['roi'].max())))
-revenue_range = st.sidebar.slider("Revenue Range", float(df['revenue'].min()), float(df['revenue'].max()), (float(df['revenue'].min()), float(df['revenue'].max())))
-date_range = st.sidebar.date_input("Start Date Range", [df['start_date'].min(), df['start_date'].max()])
+roi_range = st.sidebar.slider("ROI Range", float(df['ROI'].min()), float(df['ROI'].max()), (float(df['ROI'].min()), float(df['ROI'].max())))
+revenue_range = st.sidebar.slider("Revenue Range", float(df['Revenue'].min()), float(df['Revenue'].max()), (float(df['Revenue'].min()), float(df['Revenue'].max())))
+date_range = st.sidebar.date_input("Start Date Range", [df['Start Date'].min(), df['Start Date'].max()])
 
 # --- Filter Data ---
 filtered_df = df[
-    (df['channel'].isin(selected_channel)) &
-    (df['type'].isin(selected_type)) &
-    (df['target_audience'].isin(selected_audience)) &
-    (df['roi'].between(*roi_range)) &
-    (df['revenue'].between(*revenue_range)) &
-    (df['start_date'].dt.date.between(date_range[0], date_range[1]))
+    (df['Channel'].isin(selected_channel)) &
+    (df['Type'].isin(selected_type)) &
+    (df['Target Audience'].isin(selected_audience)) &
+    (df['ROI'].between(*roi_range)) &
+    (df['Revenue'].between(*revenue_range)) &
+    (df['Start Date'].dt.date.between(date_range[0], date_range[1]))
 ].copy()
+
+# --- Helper formatting functions ---
+def format_money(x):
+    return f"${x:,.2f}"
+
+def format_percent(x):
+    return f"{x:.2%}"
+
+def format_number(x):
+    return f"{x:,.0f}"
 
 # --- Dynamic Summary Text ---
 st.title("📈 Marketing Campaigns EDA Dashboard")
@@ -112,7 +122,7 @@ st.markdown(
         <b>Types:</b> {', '.join(selected_type)} |
         <b>Audience:</b> {', '.join(selected_audience)}<br>
         <b>ROI:</b> {roi_range[0]:.2f} to {roi_range[1]:.2f} |
-        <b>Revenue:</b> ${revenue_range[0]:,.0f} to ${revenue_range[1]:,.0f} |
+        <b>Revenue:</b> ${revenue_range[0]:,.2f} to ${revenue_range[1]:,.2f} |
         <b>Date:</b> {date_range[0]} to {date_range[1]}
     </div>
     """, unsafe_allow_html=True
@@ -133,35 +143,35 @@ with tabs[0]:
     st.info("**General overview of the filtered dataset: shows key metrics and the distribution of campaigns by channel and type.**")
     st.subheader("Dataset Overview")
     col1, col2, col3, col4 = st.columns(4)
-    col1.metric("Total Campaigns", len(filtered_df))
-    col2.metric("Avg. ROI", f"{filtered_df['roi'].mean():.2f}")
-    col3.metric("Avg. Revenue", f"${filtered_df['revenue'].mean():,.0f}")
-    col4.metric("Avg. Conversion Rate", f"{filtered_df['conversion_rate'].mean():.2%}")
+    col1.metric("Total Campaigns", f"{len(filtered_df):,}")
+    col2.metric("Avg. ROI", f"{filtered_df['ROI'].mean():.2f}")
+    col3.metric("Avg. Revenue", format_money(filtered_df['Revenue'].mean()))
+    col4.metric("Avg. Conversion Rate", format_percent(filtered_df['Conversion Rate'].mean()))
 
     st.markdown("#### Channel Distribution")
-    channel_counts = filtered_df['channel'].value_counts().reset_index()
-    channel_counts.columns = ['channel', 'count']  # Rename columns for clarity
+    channel_counts = filtered_df['Channel'].value_counts().reset_index()
+    channel_counts.columns = ['Channel', 'count']
     fig_channel = px.bar(
         channel_counts,
-        x='channel',  # Correct column name
-        y='count',    # Correct column name
-        color='channel',
+        x='Channel',
+        y='count',
+        color='Channel',
         title="Number of Campaigns by Channel",
-        labels={'channel': 'Channel', 'count': 'Number of Campaigns'},
+        labels={'Channel': 'Channel', 'count': 'Number of Campaigns'},
         color_discrete_sequence=px.colors.qualitative.Set2
     )
     st.plotly_chart(fig_channel, use_container_width=True)
 
     st.markdown("#### Campaign Type Distribution")
-    type_counts = filtered_df['type'].value_counts().reset_index()
-    type_counts.columns = ['type', 'count']  # Rename columns for clarity
+    type_counts = filtered_df['Type'].value_counts().reset_index()
+    type_counts.columns = ['Type', 'count']
     fig_type = px.bar(
         type_counts,
-        x='type',  # Correct column name
-        y='count',  # Correct column name
-        color='type',
+        x='Type',
+        y='count',
+        color='Type',
         title="Number of Campaigns by Type",
-        labels={'type': 'Campaign Type', 'count': 'Number of Campaigns'},
+        labels={'Type': 'Campaign Type', 'count': 'Number of Campaigns'},
         color_discrete_sequence=px.colors.qualitative.Set2
     )
     st.plotly_chart(fig_type, use_container_width=True)
@@ -173,18 +183,22 @@ with tabs[1]:
 
     # Most Frequently Used Channel and Best ROI
     st.markdown("#### Most Frequently Used Channel and Best ROI")
-    channel_summary = filtered_df.groupby('channel').agg(
-        total_campaigns=('channel', 'count'),
-        avg_roi=('roi', 'mean')
+    channel_summary = filtered_df.groupby('Channel').agg(
+        total_campaigns=('Channel', 'count'),
+        avg_roi=('ROI', 'mean')
     ).sort_values(by='total_campaigns', ascending=False).reset_index()
+    channel_summary['total_campaigns'] = channel_summary['total_campaigns'].map(format_number)
+    channel_summary['avg_roi'] = channel_summary['avg_roi'].map(lambda x: f"{x:.2f}")
     st.dataframe(channel_summary.head(5), use_container_width=True)
 
     # Campaign Type with Most Revenue and Best Conversion Rate
     st.markdown("#### Campaign Type with Most Revenue and Best Conversion Rate")
-    type_summary = filtered_df.groupby('type').agg(
-        total_revenue=('revenue', 'sum'),
-        avg_conversion_rate=('conversion_rate', 'mean')
+    type_summary = filtered_df.groupby('Type').agg(
+        total_revenue=('Revenue', 'sum'),
+        avg_conversion_rate=('Conversion Rate', 'mean')
     ).sort_values(by='total_revenue', ascending=False).reset_index()
+    type_summary['total_revenue'] = type_summary['total_revenue'].map(format_money)
+    type_summary['avg_conversion_rate'] = type_summary['avg_conversion_rate'].map(format_percent)
     st.dataframe(type_summary.head(5), use_container_width=True)
 
 # --- Tab 3: ROI & Revenue ---
@@ -195,28 +209,40 @@ with tabs[2]:
     # ROI Distribution
     st.markdown("#### ROI Distribution")
     fig_roi = px.box(
-        filtered_df, y="roi", points="all", color_discrete_sequence=["#1976d2"],
-        title="ROI Distribution", labels={"roi": "Return on Investment (ROI)"}
+        filtered_df, y="ROI", points="all", color_discrete_sequence=["#1976d2"],
+        title="ROI Distribution", labels={"ROI": "Return on Investment (ROI)"}
     )
+    fig_roi.update_yaxes(tickformat=".2f")
     st.plotly_chart(fig_roi, use_container_width=True)
 
     # Revenue Distribution
     st.markdown("#### Revenue Distribution")
     fig_rev = px.box(
-        filtered_df, y="revenue", points="all", color_discrete_sequence=["#26a69a"],
-        title="Revenue Distribution", labels={"revenue": "Revenue"}
+        filtered_df, y="Revenue", points="all", color_discrete_sequence=["#26a69a"],
+        title="Revenue Distribution", labels={"Revenue": "Revenue"}
     )
+    fig_rev.update_yaxes(tickprefix="$", separatethousands=True, tickformat=".2f")
     st.plotly_chart(fig_rev, use_container_width=True)
 
     # Budget vs Revenue Correlation
     st.markdown("#### Budget vs Revenue Correlation")
     fig_corr = px.scatter(
-        filtered_df, x="budget", y="revenue", color="channel",
+        filtered_df, x="Budget", y="Revenue", color="Channel",
         title="Budget vs Revenue by Channel",
-        labels={"budget": "Budget", "revenue": "Revenue"},
+        labels={"Budget": "Budget", "Revenue": "Revenue"},
         color_discrete_map=color_map
     )
+    fig_corr.update_xaxes(tickprefix="$", separatethousands=True, tickformat=".2f")
+    fig_corr.update_yaxes(tickprefix="$", separatethousands=True, tickformat=".2f")
     st.plotly_chart(fig_corr, use_container_width=True)
+
+    # Campaigns with High ROI and Revenue
+    st.markdown("#### Campaigns with High ROI and Revenue")
+    high_performance = filtered_df[(filtered_df['ROI'] > 0.5) & (filtered_df['Revenue'] > 500000)]
+    high_performance_summary = high_performance[['Campaign Name', 'ROI', 'Revenue', 'Channel', 'Type']].copy()
+    high_performance_summary['ROI'] = high_performance_summary['ROI'].map(lambda x: f"{x:.2f}")
+    high_performance_summary['Revenue'] = high_performance_summary['Revenue'].map(format_money)
+    st.dataframe(high_performance_summary, use_container_width=True)
 
 # --- Tab 4: Audience & Conversion ---
 with tabs[3]:
@@ -225,41 +251,82 @@ with tabs[3]:
 
     # Conversion Rate by Audience
     st.markdown("#### Conversion Rate by Audience")
-    audience_summary = filtered_df.groupby('target_audience').agg(
-        avg_conversion_rate=('conversion_rate', 'mean'),
-        total_campaigns=('target_audience', 'count')
+    audience_summary = filtered_df.groupby('Target Audience').agg(
+        avg_conversion_rate=('Conversion Rate', 'mean'),
+        total_campaigns=('Target Audience', 'count')
     ).reset_index()
+    audience_summary['avg_conversion_rate'] = audience_summary['avg_conversion_rate'].map(format_percent)
+    audience_summary['total_campaigns'] = audience_summary['total_campaigns'].map(format_number)
     st.dataframe(audience_summary, use_container_width=True)
 
     # Top 10 Campaigns by Net Profit
     st.markdown("#### Top 10 Campaigns by Net Profit")
-    top_campaigns = filtered_df.nlargest(10, "net_profit")[['campaign_name', 'net_profit', 'channel', 'type']]
+    top_campaigns = filtered_df.nlargest(10, "Net Profit")[['Campaign Name', 'Net Profit', 'Channel', 'Type']].copy()
+    top_campaigns['Net Profit'] = top_campaigns['Net Profit'].map(format_money)
     st.dataframe(top_campaigns, use_container_width=True)
+
+    # --- Top Campaigns by Channel ---
+    st.markdown("#### Top Campaign by Channel")
+    top_by_channel = filtered_df.loc[filtered_df.groupby('Channel')['Net Profit'].idxmax()][
+        ['Campaign Name', 'Net Profit', 'Channel', 'Type']
+    ].sort_values(by='Net Profit', ascending=False)
+    top_by_channel['Net Profit'] = top_by_channel['Net Profit'].map(format_money)
+    st.dataframe(top_by_channel, use_container_width=True)
+
+    # --- Top Campaigns by Type ---
+    st.markdown("#### Top Campaign by Type")
+    top_by_type = filtered_df.loc[filtered_df.groupby('Type')['Net Profit'].idxmax()][
+        ['Campaign Name', 'Net Profit', 'Channel', 'Type']
+    ].sort_values(by='Net Profit', ascending=False)
+    top_by_type['Net Profit'] = top_by_type['Net Profit'].map(format_money)
+    st.dataframe(top_by_type, use_container_width=True)
+
+    # --- Top 3 Campaigns by Channel (Bar Chart) ---
+    st.markdown("#### Top 3 Campaigns by Channel (Net Profit)")
+    top3_by_channel = (
+        filtered_df.sort_values('Net Profit', ascending=False)
+        .groupby('Channel')
+        .head(3)
+    )
+    fig_top3 = px.bar(
+        top3_by_channel,
+        x='Campaign Name',
+        y='Net Profit',
+        color='Channel',
+        barmode='group',
+        title="Top 3 Campaigns by Channel (Net Profit)",
+        labels={'Net Profit': 'Net Profit', 'Campaign Name': 'Campaign Name'},
+        hover_data=['Type']
+    )
+    fig_top3.update_yaxes(tickprefix="$", separatethousands=True, tickformat=".2f")
+    st.plotly_chart(fig_top3, use_container_width=True)
 
 # --- Tab 5: Temporal Patterns ---
 with tabs[4]:
     st.info("**Explore temporal and seasonal patterns in campaign performance.**")
     st.subheader("Temporal & Seasonal Patterns")
 
-    # ROI by Month
-    st.markdown("#### ROI by Month")
-    filtered_df['start_month'] = filtered_df['start_date'].dt.month
-    roi_month = filtered_df.groupby('start_month')['roi'].mean().reset_index()
-    fig_month = px.line(
-        roi_month, x="start_month", y="roi", markers=True,
-        title="Average ROI by Month", labels={"start_month": "Month", "roi": "Avg. ROI"}
-    )
-    st.plotly_chart(fig_month, use_container_width=True)
-
     # Revenue by Quarter
     st.markdown("#### Revenue by Quarter")
-    filtered_df['start_quarter'] = filtered_df['start_date'].dt.quarter
-    rev_quarter = filtered_df.groupby('start_quarter')['revenue'].mean().reset_index()
+    filtered_df['Start Quarter'] = filtered_df['Start Date'].dt.quarter
+    rev_quarter = filtered_df.groupby('Start Quarter')['Revenue'].mean().reset_index()
     fig_quarter = px.bar(
-        rev_quarter, x="start_quarter", y="revenue", color="start_quarter",
-        title="Average Revenue by Quarter", labels={"start_quarter": "Quarter", "revenue": "Avg. Revenue"}
+        rev_quarter, x="Start Quarter", y="Revenue", color="Start Quarter",
+        title="Average Revenue by Quarter", labels={"Start Quarter": "Quarter", "Revenue": "Avg. Revenue"}
     )
+    fig_quarter.update_yaxes(tickprefix="$", separatethousands=True, tickformat=".2f")
     st.plotly_chart(fig_quarter, use_container_width=True)
+
+    # ROI by Month
+    st.markdown("#### ROI by Month")
+    filtered_df['Start Month'] = filtered_df['Start Date'].dt.month
+    roi_month = filtered_df.groupby('Start Month')['ROI'].mean().reset_index()
+    fig_month = px.line(
+        roi_month, x="Start Month", y="ROI", markers=True,
+        title="Average ROI by Month", labels={"Start Month": "Month", "ROI": "Avg. ROI"}
+    )
+    fig_month.update_yaxes(tickformat=".2f")
+    st.plotly_chart(fig_month, use_container_width=True)
 
 # --- Tab 6: Insights & Recommendations ---
 with tabs[5]:
