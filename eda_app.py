@@ -80,6 +80,17 @@ def load_data():
 
 df = load_data()
 
+# --- Preprocess Text for Professional Look ---
+def format_text(df):
+    # Replace underscores with spaces and capitalize text for relevant columns
+    for col in ['channel', 'type', 'target_audience']:
+        if col in df.columns:
+            df[col] = df[col].str.replace('_', ' ').str.title()  # Replace underscores and capitalize
+    # Ensure B2B/B2C remains uppercase in target_audience
+    if 'target_audience' in df.columns:
+        df['target_audience'] = df['target_audience'].str.upper()
+    return df
+
 # --- Sidebar Filters ---
 st.sidebar.header("📊 Campaign Filters")
 channels = df['channel'].unique().tolist()
@@ -103,15 +114,18 @@ filtered_df = df[
     (df['start_date'].dt.date.between(date_range[0], date_range[1]))
 ].copy()
 
+# Apply formatting to the filtered DataFrame
+filtered_df = format_text(filtered_df)
+
 # --- Dynamic Summary Text ---
 st.title("📈 Marketing Campaigns EDA Dashboard")
 st.markdown(
     f"""
     <div style='font-size:1.1rem; color:#222; margin-bottom:1em; font-family:Montserrat, sans-serif;'>
         <b>{len(filtered_df):,}</b> CAMPAIGNS SELECTED.<br>
-        <b>CHANNELS:</b> {', '.join([channel.capitalize() for channel in selected_channel])} |
-        <b>TYPES:</b> {', '.join([campaign_type.capitalize() for campaign_type in selected_type])} |
-        <b>AUDIENCE:</b> {', '.join([audience.upper() for audience in selected_audience])}<br>
+        <b>CHANNELS:</b> {', '.join(selected_channel)} |
+        <b>TYPES:</b> {', '.join(selected_type)} |
+        <b>AUDIENCE:</b> {', '.join(selected_audience)}<br>
         <b>ROI:</b> {roi_range[0]:.2f} TO {roi_range[1]:.2f} |
         <b>REVENUE:</b> ${revenue_range[0]:,.2f} TO ${revenue_range[1]:,.2f} |
         <b>DATE:</b> {date_range[0]} TO {date_range[1]}
