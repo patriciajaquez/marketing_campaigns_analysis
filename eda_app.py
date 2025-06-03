@@ -201,21 +201,23 @@ with tabs[1]:
     type_summary['avg_conversion_rate'] = type_summary['avg_conversion_rate'].map(format_percent)
     st.dataframe(type_summary.head(5), use_container_width=True)
 
-    # --- Top Campaigns by Channel ---
-    st.markdown("#### Top 5 Campaigns by Channel")
+    # --- Top Campaign by Channel (Highest Net Profit) ---
+    st.markdown("#### Top Campaign by Channel (Highest Net Profit)")
+    st.caption("Showing the single highest net profit campaign for each channel.")
     top_by_channel = filtered_df.loc[filtered_df.groupby('Channel')['Net Profit'].idxmax()][
         ['Campaign Name', 'Net Profit', 'Channel', 'Type']
     ].sort_values(by='Net Profit', ascending=False)
     top_by_channel['Net Profit'] = top_by_channel['Net Profit'].map(format_money)
-    st.dataframe(top_by_channel.head(5), use_container_width=True)
+    st.dataframe(top_by_channel, use_container_width=True)
 
-    # --- Top Campaigns by Type ---
-    st.markdown("#### Top 5 Campaigns by Type")
+    # --- Top Campaign by Type (Highest Net Profit) ---
+    st.markdown("#### Top Campaign by Type (Highest Net Profit)")
+    st.caption("Showing the single highest net profit campaign for each campaign type.")
     top_by_type = filtered_df.loc[filtered_df.groupby('Type')['Net Profit'].idxmax()][
         ['Campaign Name', 'Net Profit', 'Channel', 'Type']
     ].sort_values(by='Net Profit', ascending=False)
     top_by_type['Net Profit'] = top_by_type['Net Profit'].map(format_money)
-    st.dataframe(top_by_type.head(5), use_container_width=True)
+    st.dataframe(top_by_type, use_container_width=True)
 
 # --- Tab 3: ROI & Revenue ---
 with tabs[2]:
@@ -260,8 +262,9 @@ with tabs[2]:
     high_performance_summary['Revenue'] = high_performance_summary['Revenue'].map(format_money)
     st.dataframe(high_performance_summary, use_container_width=True)
 
+# --- Tab 4: Audience & Conversion ---
 with tabs[3]:
-    st.info("**Compare the performance between B2B and B2C audiences, and display the most profitable campaigns.**")
+    st.info("**Compare the performance between B2B and B2C audiences, and display conversion performance by channel and type.**")
     st.subheader("Audience & Conversion Analysis")
 
     # Conversion Rate by Audience
@@ -273,8 +276,41 @@ with tabs[3]:
     audience_summary['avg_conversion_rate'] = audience_summary['avg_conversion_rate'].map(format_percent)
     audience_summary['total_campaigns'] = audience_summary['total_campaigns'].map(format_number)
     st.dataframe(audience_summary, use_container_width=True)
-    
-    # Conversion Rate by Channel and Audience
+
+    # Top 10 Campaigns by Conversion Rate
+    st.markdown("#### Top 10 Campaigns by Conversion Rate")
+    top_conv_campaigns = filtered_df.nlargest(10, "Conversion Rate")[['Campaign Name', 'Conversion Rate', 'Channel', 'Type', 'Target Audience']].copy()
+    top_conv_campaigns['Conversion Rate'] = top_conv_campaigns['Conversion Rate'].map(format_percent)
+    st.dataframe(top_conv_campaigns, use_container_width=True)
+
+    # Conversion Rate by Channel (Bar Chart)
+    st.markdown("#### Conversion Rate by Channel")
+    conv_by_channel = filtered_df.groupby('Channel')['Conversion Rate'].mean().reset_index().sort_values(by='Conversion Rate', ascending=False)
+    fig_conv_channel = px.bar(
+        conv_by_channel,
+        x='Channel',
+        y='Conversion Rate',
+        title="Average Conversion Rate by Channel",
+        labels={'Conversion Rate': 'Avg. Conversion Rate'}
+    )
+    fig_conv_channel.update_yaxes(tickformat=".2%")
+    st.plotly_chart(fig_conv_channel, use_container_width=True)
+
+    # Conversion Rate by Campaign Type (Bar Chart)
+    st.markdown("#### Conversion Rate by Campaign Type")
+    conv_by_type = filtered_df.groupby('Type')['Conversion Rate'].mean().reset_index().sort_values(by='Conversion Rate', ascending=False)
+    fig_conv_type = px.bar(
+        conv_by_type,
+        x='Type',
+        y='Conversion Rate',
+        title="Average Conversion Rate by Campaign Type",
+        labels={'Conversion Rate': 'Avg. Conversion Rate'}
+    )
+    fig_conv_type.update_yaxes(tickformat=".2%")
+    st.plotly_chart(fig_conv_type, use_container_width=True)
+
+    # Audience Conversion Rate by Channel (Grouped Bar Chart)
+    st.markdown("#### Audience Conversion Rate by Channel")
     audience_channel = filtered_df.groupby(['Channel', 'Target Audience'])['Conversion Rate'].mean().reset_index()
     fig_aud_chan = px.bar(
         audience_channel,
@@ -287,12 +323,19 @@ with tabs[3]:
     fig_aud_chan.update_yaxes(tickformat=".2%")
     st.plotly_chart(fig_aud_chan, use_container_width=True)
 
-    # Audience Conversion Rate by Type
+    # Audience Conversion Rate by Type (Grouped Bar Chart)
     st.markdown("#### Audience Conversion Rate by Campaign Type")
     audience_type = filtered_df.groupby(['Type', 'Target Audience'])['Conversion Rate'].mean().reset_index()
-    audience_type['Conversion Rate'] = audience_type['Conversion Rate'].map(format_percent)
-    audience_type_pivot = audience_type.pivot(index='Type', columns='Target Audience', values='Conversion Rate').reset_index()
-    st.dataframe(audience_type_pivot, use_container_width=True)
+    fig_aud_type = px.bar(
+        audience_type,
+        x='Type',
+        y='Conversion Rate',
+        color='Target Audience',
+        barmode='group',
+        title="Conversion Rate by Campaign Type and Audience"
+    )
+    fig_aud_type.update_yaxes(tickformat=".2%")
+    st.plotly_chart(fig_aud_type, use_container_width=True)
 
 # --- Tab 5: Temporal Patterns ---
 with tabs[4]:
@@ -331,10 +374,12 @@ with tabs[5]:
     2. **Best ROI Channel:** Organic campaigns have the highest average ROI.
     3. **Top Campaign Type:** Social media campaigns generate the most revenue, while webinars have the best conversion rates.
     4. **B2B vs B2C:** Conversion rates are similar between B2B and B2C audiences.
-    5. **Top Campaign:** The campaign with the highest net profit is "Advanced Systematic Complexity."
+    5. **Top Campaigns:** The top campaign by net profit for each channel and type is shown above.
     6. **Budget vs Revenue:** There is a positive correlation between budget and revenue, but it varies by channel.
     7. **High-Performance Campaigns:** 534 campaigns have ROI > 0.5 and revenue > $500,000.
     8. **Seasonal Patterns:** ROI peaks in Q1 and Q4, while revenue peaks in Q2 and Q3.
+
+    _Note: All insights reflect the current filter selections above._
 
     ### Recommendations
     - Focus on organic and promotion channels for higher ROI.

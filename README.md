@@ -19,10 +19,10 @@ This project focuses on analyzing the performance of various marketing campaigns
 
 The dataset contains **1,005 marketing campaigns** with the following attributes:
 
-- **Campaign Details**: `campaign_name`, `start_date`, `end_date`, `type`, `channel`, `target_audience`
-- **Performance Metrics**: `budget`, `roi`, `revenue`, `net_profit`, `conversion_rate`, `cost_per_conversion`
-- **Categorical Features**: `roi_category`, `conversion_category`, `high_budget_flag`, `high_roi_flag`
-- **Date Features**: `start_year`, `start_month`, `start_quarter`
+- **Campaign Details**: `Campaign Name`, `Start Date`, `End Date`, `Type`, `Channel`, `Target Audience`
+- **Performance Metrics**: `Budget`, `ROI`, `Revenue`, `Net Profit`, `Conversion Rate`, `Cost Per Conversion`
+- **Categorical Features**: `ROI Category`, `Conversion Category`, `High Budget Flag`, `High Roi Flag`
+- **Date Features**: `Start Year`, `Start Month`, `Start Quarter`
 
 ---
 
@@ -37,10 +37,21 @@ The dataset contains **1,005 marketing campaigns** with the following attributes
 
 ## 📊 Key Insights
 
-- **Email** and **social media** campaigns show the highest ROI on average.
-- **B2C** campaigns tend to have higher conversion rates compared to **B2B**.
-- **Organic** and **promotion** channels outperform **paid** in ROI.
-- Most campaigns with high budget do not guarantee high performance.
+- **Promotion** is the most frequently used marketing channel.
+- **Organic** campaigns have the highest average ROI; **paid** campaigns have the highest median ROI.
+- **Social media** campaigns generate the highest average revenue.
+- **Webinar** campaigns achieve the highest average conversion rates.
+- There is **no statistically significant difference** in conversion rates between B2B and B2C audiences.
+- The top campaign by net profit is an organic podcast campaign with exceptionally high ROI.
+- There is a positive relationship between budget and revenue, but increasing budget does not always guarantee higher revenue or ROI.
+- **534 campaigns** have ROI > 0.5 and revenue > $500,000, most frequently associated with organic and promotion channels.
+- ROI peaks in Q1 and Q4, while revenue peaks in Q2 and Q3, indicating seasonal effects.
+
+## 🧮 How Insights Are Calculated
+
+- ROI, revenue, and conversion rates are recalculated and formatted for clarity.
+- Outliers and missing values are handled as described in the data preparation section.
+- All summary tables and charts reflect the current filter selections in the dashboard.
 
 ---
 
@@ -127,11 +138,16 @@ You can explore the marketing campaign data interactively using the Streamlit da
    ```
 3. Use the sidebar filters to select channels and target audiences, and explore ROI distributions and other visualizations.
 
+> **Note:** All dashboard insights and visualizations update dynamically based on your filter selections in the sidebar.
+
 **Features:**
-  - Filter campaigns by channel and target audience
-  - Visualize ROI by channel (boxplot)
-  - View filtered data in a table
-  - Easily extend with more visualizations
+  - Filter campaigns by channel, type, audience, ROI, revenue, and date range
+  - Visualize campaign distributions by channel and type
+  - Compare performance metrics (ROI, revenue, conversion rate) by channel and type
+  - Analyze conversion rates by audience, channel, and campaign type (including grouped comparisons)
+  - Explore temporal patterns (by month and quarter)
+  - View top campaigns by net profit, ROI, and conversion rate
+  - All tables and charts update dynamically based on sidebar filters
 
 ---
 
