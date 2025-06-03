@@ -91,11 +91,18 @@ def format_text(df):
         df['target_audience'] = df['target_audience'].str.upper()
     return df
 
+# --- Format DataFrame Headers and Campaign Names ---
+def format_dataframe(df):
+    df.columns = [col.replace('_', ' ').title() for col in df.columns]  # Format headers
+    if 'campaign_name' in df.columns:
+        df['campaign_name'] = df['campaign_name'].str.replace('_', ' ').str.title()  # Format campaign names
+    return df
+
 # --- Sidebar Filters ---
 st.sidebar.header("📊 Campaign Filters")
-channels = df['channel'].unique().tolist()
-types = df['type'].unique().tolist()
-audiences = df['target_audience'].unique().tolist()
+channels = [channel.replace('_', ' ').title() for channel in df['channel'].unique().tolist()]
+types = [campaign_type.replace('_', ' ').title() for campaign_type in df['type'].unique().tolist()]
+audiences = [audience.upper() if audience.upper() in ['B2B', 'B2C'] else audience.replace('_', ' ').title() for audience in df['target_audience'].unique().tolist()]
 
 selected_channel = st.sidebar.multiselect("Channel", options=channels, default=channels)
 selected_type = st.sidebar.multiselect("Campaign Type", options=types, default=types)
@@ -122,13 +129,13 @@ st.title("📈 Marketing Campaigns EDA Dashboard")
 st.markdown(
     f"""
     <div style='font-size:1.1rem; color:#222; margin-bottom:1em; font-family:Montserrat, sans-serif;'>
-        <b>{len(filtered_df):,}</b> CAMPAIGNS SELECTED.<br>
-        <b>CHANNELS:</b> {', '.join(selected_channel)} |
-        <b>TYPES:</b> {', '.join(selected_type)} |
-        <b>AUDIENCE:</b> {', '.join(selected_audience)}<br>
-        <b>ROI:</b> {roi_range[0]:.2f} TO {roi_range[1]:.2f} |
-        <b>REVENUE:</b> ${revenue_range[0]:,.2f} TO ${revenue_range[1]:,.2f} |
-        <b>DATE:</b> {date_range[0]} TO {date_range[1]}
+        <b>{len(filtered_df):,}</b> campaigns selected.<br>
+        <b>Channels:</b> {', '.join(selected_channel)} |
+        <b>Types:</b> {', '.join(selected_type)} |
+        <b>Audience:</b> {', '.join(selected_audience)}<br>
+        <b>ROI:</b> {roi_range[0]:.2f} to {roi_range[1]:.2f} |
+        <b>Revenue:</b> ${revenue_range[0]:,.2f} to ${revenue_range[1]:,.2f} |
+        <b>Date:</b> {date_range[0]} to {date_range[1]}
     </div>
     """, unsafe_allow_html=True
 )
@@ -145,7 +152,7 @@ tabs = st.tabs([
 
 # --- Tab 1: Overview ---
 with tabs[0]:
-    st.info("**General Overview Of The Filtered Dataset: Shows Key Metrics And The Distribution Of Campaigns By Channel And Type.**")
+    st.info("General overview of the filtered dataset: Shows key metrics and the distribution of campaigns by channel and type.")
     st.subheader("Dataset Overview")
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("Total Campaigns", f"{len(filtered_df):,}")
@@ -183,7 +190,7 @@ with tabs[0]:
 
 # --- Tab 2: Channel & Type Analysis ---
 with tabs[1]:
-    st.info("**Compare The Performance Of Channels And Campaign Types In Terms Of ROI, Revenue, And Conversion Rate.**")
+    st.info("Compare the performance of channels and campaign types in terms of ROI, revenue, and conversion rate.")
     st.subheader("Channel & Type Performance")
 
     # Most Frequently Used Channel and Best ROI
@@ -207,7 +214,7 @@ with tabs[1]:
 
 # --- Tab 3: ROI & Revenue ---
 with tabs[2]:
-    st.info("**Analyze The Distribution Of ROI And Revenue, And The Relationship Between Budget And Revenue.**")
+    st.info("Analyze the distribution of ROI and revenue, and the relationship between budget and revenue.")
     st.subheader("ROI & Revenue Analysis")
 
     # ROI Distribution
@@ -238,27 +245,33 @@ with tabs[2]:
 
 # --- Tab 4: Audience & Conversion ---
 with tabs[3]:
-    st.info("**Compare The Performance Between B2B And B2C Audiences, And Display The Most Profitable Campaigns.**")
+    st.info("Compare the performance between B2B and B2C audiences, and display the most profitable campaigns.")
     st.subheader("Audience & Conversion Analysis")
 
     # Conversion Rate by Audience
-    st.markdown("#### Conversion Rate By Audience")
+    st.markdown("#### Conversion Rate by Audience")
     audience_summary = filtered_df.groupby('target_audience').agg(
         avg_conversion_rate=('conversion_rate', 'mean'),
         total_campaigns=('target_audience', 'count')
     ).reset_index()
     audience_summary['avg_conversion_rate'] = audience_summary['avg_conversion_rate'].apply(lambda x: f"{x:.2%}")  # Format conversion rate
+
+    # Apply formatting to DataFrame
+    audience_summary = format_dataframe(audience_summary)
     st.dataframe(audience_summary, use_container_width=True)
 
     # Top 10 Campaigns by Net Profit
-    st.markdown("#### Top 10 Campaigns By Net Profit")
+    st.markdown("#### Top 10 Campaigns by Net Profit")
     top_campaigns = filtered_df.nlargest(10, "net_profit")[['campaign_name', 'net_profit', 'channel', 'type']]
     top_campaigns['net_profit'] = top_campaigns['net_profit'].apply(lambda x: f"${x:,.2f}")  # Format net profit
+
+    # Apply formatting to DataFrame
+    top_campaigns = format_dataframe(top_campaigns)
     st.dataframe(top_campaigns, use_container_width=True)
 
 # --- Tab 5: Temporal Patterns ---
 with tabs[4]:
-    st.info("**Explore Temporal And Seasonal Patterns In Campaign Performance.**")
+    st.info("Explore temporal and seasonal patterns in campaign performance.")
     st.subheader("Temporal & Seasonal Patterns")
 
     # ROI by Month
@@ -289,14 +302,14 @@ with tabs[5]:
     st.subheader("Insights & Recommendations")
     st.markdown("""
     ### Key Insights
-    1. **Most Frequently Used Channel:** Promotion is the most frequently used channel.
-    2. **Best ROI Channel:** Organic campaigns have the highest average ROI.
-    3. **Top Campaign Type:** Social media campaigns generate the most revenue, while webinars have the best conversion rates.
+    1. **Most frequently used channel:** Promotion is the most frequently used channel.
+    2. **Best ROI channel:** Organic campaigns have the highest average ROI.
+    3. **Top campaign type:** Social media campaigns generate the most revenue, while webinars have the best conversion rates.
     4. **B2B vs B2C:** Conversion rates are similar between B2B and B2C audiences.
-    5. **Top Campaign:** The campaign with the highest net profit is "Advanced Systematic Complexity."
-    6. **Budget vs Revenue:** There is a positive correlation between budget and revenue, but it varies by channel.
-    7. **High-Performance Campaigns:** 534 campaigns have ROI > 0.5 and revenue > $500,000.
-    8. **Seasonal Patterns:** ROI peaks in Q1 and Q4, while revenue peaks in Q2 and Q3.
+    5. **Top campaign:** The campaign with the highest net profit is "Advanced Systematic Complexity."
+    6. **Budget vs revenue:** There is a positive correlation between budget and revenue, but it varies by channel.
+    7. **High-performance campaigns:** 534 campaigns have ROI > 0.5 and revenue > $500,000.
+    8. **Seasonal patterns:** ROI peaks in Q1 and Q4, while revenue peaks in Q2 and Q3.
 
     ### Recommendations
     - Focus on organic and promotion channels for higher ROI.
