@@ -201,6 +201,22 @@ with tabs[1]:
     type_summary['avg_conversion_rate'] = type_summary['avg_conversion_rate'].map(format_percent)
     st.dataframe(type_summary.head(5), use_container_width=True)
 
+    # --- Top Campaigns by Channel ---
+    st.markdown("#### Top 5 Campaigns by Channel")
+    top_by_channel = filtered_df.loc[filtered_df.groupby('Channel')['Net Profit'].idxmax()][
+        ['Campaign Name', 'Net Profit', 'Channel', 'Type']
+    ].sort_values(by='Net Profit', ascending=False)
+    top_by_channel['Net Profit'] = top_by_channel['Net Profit'].map(format_money)
+    st.dataframe(top_by_channel.head(5), use_container_width=True)
+
+    # --- Top Campaigns by Type ---
+    st.markdown("#### Top 5 Campaigns by Type")
+    top_by_type = filtered_df.loc[filtered_df.groupby('Type')['Net Profit'].idxmax()][
+        ['Campaign Name', 'Net Profit', 'Channel', 'Type']
+    ].sort_values(by='Net Profit', ascending=False)
+    top_by_type['Net Profit'] = top_by_type['Net Profit'].map(format_money)
+    st.dataframe(top_by_type.head(5), use_container_width=True)
+
 # --- Tab 3: ROI & Revenue ---
 with tabs[2]:
     st.info("**Analyze the distribution of ROI and revenue, and the relationship between budget and revenue.**")
@@ -244,7 +260,6 @@ with tabs[2]:
     high_performance_summary['Revenue'] = high_performance_summary['Revenue'].map(format_money)
     st.dataframe(high_performance_summary, use_container_width=True)
 
-# --- Tab 4: Audience & Conversion ---
 with tabs[3]:
     st.info("**Compare the performance between B2B and B2C audiences, and display the most profitable campaigns.**")
     st.subheader("Audience & Conversion Analysis")
@@ -258,48 +273,26 @@ with tabs[3]:
     audience_summary['avg_conversion_rate'] = audience_summary['avg_conversion_rate'].map(format_percent)
     audience_summary['total_campaigns'] = audience_summary['total_campaigns'].map(format_number)
     st.dataframe(audience_summary, use_container_width=True)
-
-    # Top 10 Campaigns by Net Profit
-    st.markdown("#### Top 10 Campaigns by Net Profit")
-    top_campaigns = filtered_df.nlargest(10, "Net Profit")[['Campaign Name', 'Net Profit', 'Channel', 'Type']].copy()
-    top_campaigns['Net Profit'] = top_campaigns['Net Profit'].map(format_money)
-    st.dataframe(top_campaigns, use_container_width=True)
-
-    # --- Top Campaigns by Channel ---
-    st.markdown("#### Top Campaign by Channel")
-    top_by_channel = filtered_df.loc[filtered_df.groupby('Channel')['Net Profit'].idxmax()][
-        ['Campaign Name', 'Net Profit', 'Channel', 'Type']
-    ].sort_values(by='Net Profit', ascending=False)
-    top_by_channel['Net Profit'] = top_by_channel['Net Profit'].map(format_money)
-    st.dataframe(top_by_channel, use_container_width=True)
-
-    # --- Top Campaigns by Type ---
-    st.markdown("#### Top Campaign by Type")
-    top_by_type = filtered_df.loc[filtered_df.groupby('Type')['Net Profit'].idxmax()][
-        ['Campaign Name', 'Net Profit', 'Channel', 'Type']
-    ].sort_values(by='Net Profit', ascending=False)
-    top_by_type['Net Profit'] = top_by_type['Net Profit'].map(format_money)
-    st.dataframe(top_by_type, use_container_width=True)
-
-    # --- Top 3 Campaigns by Channel (Bar Chart) ---
-    st.markdown("#### Top 3 Campaigns by Channel (Net Profit)")
-    top3_by_channel = (
-        filtered_df.sort_values('Net Profit', ascending=False)
-        .groupby('Channel')
-        .head(3)
-    )
-    fig_top3 = px.bar(
-        top3_by_channel,
-        x='Campaign Name',
-        y='Net Profit',
-        color='Channel',
+    
+    # Conversion Rate by Channel and Audience
+    audience_channel = filtered_df.groupby(['Channel', 'Target Audience'])['Conversion Rate'].mean().reset_index()
+    fig_aud_chan = px.bar(
+        audience_channel,
+        x='Channel',
+        y='Conversion Rate',
+        color='Target Audience',
         barmode='group',
-        title="Top 3 Campaigns by Channel (Net Profit)",
-        labels={'Net Profit': 'Net Profit', 'Campaign Name': 'Campaign Name'},
-        hover_data=['Type']
+        title="Conversion Rate by Channel and Audience"
     )
-    fig_top3.update_yaxes(tickprefix="$", separatethousands=True, tickformat=".2f")
-    st.plotly_chart(fig_top3, use_container_width=True)
+    fig_aud_chan.update_yaxes(tickformat=".2%")
+    st.plotly_chart(fig_aud_chan, use_container_width=True)
+
+    # Audience Conversion Rate by Type
+    st.markdown("#### Audience Conversion Rate by Campaign Type")
+    audience_type = filtered_df.groupby(['Type', 'Target Audience'])['Conversion Rate'].mean().reset_index()
+    audience_type['Conversion Rate'] = audience_type['Conversion Rate'].map(format_percent)
+    audience_type_pivot = audience_type.pivot(index='Type', columns='Target Audience', values='Conversion Rate').reset_index()
+    st.dataframe(audience_type_pivot, use_container_width=True)
 
 # --- Tab 5: Temporal Patterns ---
 with tabs[4]:
